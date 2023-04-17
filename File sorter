@@ -1,0 +1,48 @@
+#Automatic file sorter
+#Code for creating and sorting files according to their file type
+
+#import the operating system
+import os,shutil
+
+
+#get the path of the folder you are working on
+
+path = "/Users/taras/Python tutorials/"
+
+
+# lists the files under the path
+os.listdir(path)
+
+# adding a folder inside the Python turorials folder
+
+os.path.exists(path + 'excel files')
+
+
+# In[45]: Check the folder names and if they are not creating this code will create it.
+
+folder_names = ['image files','text files','excel files','csv files'] #creating a list of folders
+
+for loop in range(0,4):
+    if not os.path.exists(path + folder_names[loop]):
+        print(path + folder_names[loop])
+        os.makedirs((path + folder_names[loop]))
+
+file_name = os.listdir(path)
+  
+# Check csv, png and text and if they are not inside the file directory, code will move the file to the folder
+
+for file in file_name:
+    if ".csv" in file and not os.path.exists(path + "csv files/" + file):
+        shutil.move(path + file, path + "csv files/" + file)
+    elif ".JPG" in file and not os.path.exists(path + "image files/" + file):
+        shutil.move(path + file, path + "image files/" + file)
+    elif ".docx" in file and not os.path.exists(path + "text files/" + file):
+        shutil.move(path + file, path + "text files/" + file)
+    elif ".xlsx" in file and not os.path.exists(path + "excel files/" + file):
+        shutil.move(path + file, path + "excel files/" + file)
+
+
+
+
+
+
