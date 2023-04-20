@@ -1,0 +1,125 @@
+#import libraries
+In [9]:
+from bs4 import BeautifulSoup
+import requests
+import time
+import datetime
+
+import smtplib
+In [10]:
+pip install requests
+Requirement already satisfied: requests in ./anaconda3/lib/python3.10/site-packages (2.28.1)
+Requirement already satisfied: certifi>=2017.4.17 in ./anaconda3/lib/python3.10/site-packages (from requests) (2022.12.7)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in ./anaconda3/lib/python3.10/site-packages (from requests) (1.26.14)
+Requirement already satisfied: charset-normalizer<3,>=2 in ./anaconda3/lib/python3.10/site-packages (from requests) (2.0.4)
+Requirement already satisfied: idna<4,>=2.5 in ./anaconda3/lib/python3.10/site-packages (from requests) (3.4)
+Note: you may need to restart the kernel to use updated packages.
+In [28]:
+# Connect to Website and pull in data
+
+URL = 'https://www.amazon.com/Funny-Data-Systems-Business-Analyst/dp/B07FNW9FGJ/ref=sr_1_3?dchild=1&keywords=data%2Banalyst%2Btshirt&qid=1626655184&sr=8-3&customId=B0752XJYNL&th=1'
+
+headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36", 
+           "Accept-Encoding":"gzip, deflate", 
+           "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", 
+           "DNT":"1","Connection":"close", 
+           "Upgrade-Insecure-Requests":"1"}
+
+page = requests.get(URL, headers=headers)
+
+soup1 = BeautifulSoup(page.content, "html.parser")
+
+soup2 = BeautifulSoup(soup1.prettify(),"html.parser")
+
+title = soup2.find(id='productTitle').get_text()
+
+price = soup2.find('span', {'class': 'a-offscreen'}).get_text()
+
+print(title)
+print(price.strip())
+              Funny Got Data MIS Data Systems Business Analyst T-Shirt
+             
+$16.99
+In [36]:
+price_num = price.strip()[1:]
+title_final = title.strip()
+print(title_final)
+print(price_num)
+
+type(price_num)
+Funny Got Data MIS Data Systems Business Analyst T-Shirt
+16.99
+Out[36]:	
+str
+In [45]:
+import datetime
+
+today = datetime.date.today()
+print(today)
+2023-04-20
+In [49]:
+import csv
+header = ['Title', 'Price','Date']
+data = [title_final, price_num, today]
+
+with open('AmazonWebScrapper.csv','w', newline='', encoding='utf8') as f:
+    writer = csv.writer(f)
+    writer.writerow(header)
+    writer.writerow(data)
+In [ ]:
+import pandas as pd
+
+df=pd.read_csv('/Users/tarashakya/AmazonWebScrapper.csv')
+print(df)
+In [ ]:
+#appending the data into the csv
+
+with open('AmazonWebScrapper.csv','a+', newline='', encoding='utf8') as f:
+    writer = csv.writer(f)
+    writer.writerow(data)
+In [ ]:
+def check_price():
+    URL = 'https://www.amazon.com/Funny-Data-Systems-Business-Analyst/dp/B07FNW9FGJ/ref=sr_1_3?dchild=1&keywords=data%2Banalyst%2Btshirt&qid=1626655184&sr=8-3&customId=B0752XJYNL&th=1'
+
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36", 
+               "Accept-Encoding":"gzip, deflate", 
+               "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", 
+               "DNT":"1","Connection":"close", 
+               "Upgrade-Insecure-Requests":"1"}
+
+    page = requests.get(URL, headers=headers)
+
+    soup1 = BeautifulSoup(page.content, "html.parser")
+
+    soup2 = BeautifulSoup(soup1.prettify(),"html.parser")
+
+    title = soup2.find(id='productTitle').get_text()
+
+    price = soup2.find('span', {'class': 'a-offscreen'}).get_text()
+
+    price_num = price.strip()[1:]
+    title_final = title.strip()
+   
+    import datetime
+    today = datetime.date.today()
+    
+    import csv
+    header = ['Title', 'Price','Date']
+    data = [title_final, price_num, today]
+    
+    with open('AmazonWebScrapper.csv','a+', newline='', encoding='utf8') as f:
+        writer = csv.writer(f)
+        writer.writerow(data)
+In [ ]:
+while(True):
+    check_price()
+    time.sleep(86400)
+In [ ]:
+import pandas as pd
+
+df=pd.read_csv('/Users/tarashakya/AmazonWebScrapper.csv')
+print(df)
+In [ ]:
+ 
+In [ ]:
+ 
