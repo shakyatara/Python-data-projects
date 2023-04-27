@@ -23,3 +23,15 @@ try:
   #print(data)
 except (ConnectionError, Timeout, TooManyRedirects) as e:
   print(e)
+
+#checking the type of data extracted
+type(data)
+
+#importing pandas for a nice table view
+import pandas as pd
+
+pd.set_option('display.max_columns', None)
+
+#print the data
+
+pd.json_normalize(data['data'])
