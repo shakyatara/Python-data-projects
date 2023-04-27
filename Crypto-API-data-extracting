@@ -33,5 +33,67 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 #print the data
-
 pd.json_normalize(data['data'])
+
+#store the data inside dataframes and load dataframe
+df = pd.json_normalize(data['data'])
+
+df['timestamp'] = pd.to_datetime('now')
+df
+
+
+#storing inside function
+def api_runner():
+    global df
+    url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest' 
+    #Original Sandbox Environment: 'https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+    parameters = {
+      'start':'1',
+      'limit':'100',
+      'convert':'USD'
+    }
+    headers = {
+      'Accepts': 'application/json',
+      'X-CMC_PRO_API_KEY': '6f057d7c-bf7b-48de-a2d1-dbddc9c76d50',
+    }
+
+    session = Session()
+    session.headers.update(headers)
+
+    try:
+      response = session.get(url, params=parameters)
+      data = json.loads(response.text)
+      #print(data)
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+      print(e)
+    
+    
+    df = pd.json_normalize(data['data'])
+  
+    df['timestamp'] = pd.to_datetime('now')
+    df
+    
+
+    if not os.path.isfile(r"/Users/tarashakya/Documents/API.csv"):
+        df.to_csv(r"/Users/ts/Document/API.csv", header = 'column_names')
+    else:
+        df.to_csv(r"/Users/ts/Document/API.csv", mode = 'a', header = False)
+        
+    #implementing time and sleep
+    import os 
+    from time import time
+    from time import sleep
+
+    for i in range(333):
+        api_runner()
+        print('API runner success')
+        sleep(60) #wait for 60 seconds
+    exit()
+       
+#this is code to read the csv
+df72 = pd.read_csv(r"/Users/ts/Document/API.csv")
+
+df72    #loads the date in table format
+
+
+
