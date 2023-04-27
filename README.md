@@ -1,2 +1,2 @@
-# Python-file-sorter
+# Python projects
 Anaconda and Jupyter notebook
